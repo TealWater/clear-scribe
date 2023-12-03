@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+
 type IncomingText struct {
 	Message string `json:"message"`
 }

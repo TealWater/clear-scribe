@@ -6,7 +6,9 @@ import (
 
 	controller "github.com/TealWater/clear-scribe/src/Controller"
 	"github.com/gin-gonic/gin"
+
 	"github.com/joho/godotenv"
+
 	cors "github.com/rs/cors/wrapper/gin"
 )
 
@@ -38,4 +40,5 @@ func main() {
 	// router.GET("/allRecords", controller.GetAllRecords)
 	router.GET("/history", controller.UploadMockHistory)
 	router.Run(":" + os.Getenv("PORT"))
+
 }

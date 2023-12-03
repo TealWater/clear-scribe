@@ -57,6 +57,7 @@ func UploadText(c *gin.Context) {
 
 }
 
+
 func UploadFile(c *gin.Context) {
 	fileUpload := &obj.FileUpload{}
 	// Bind the file from the request to the struct
