@@ -23,6 +23,6 @@ func main() {
 	}))
 
 	router.POST("/send", controller.Parse)
-	// router.POST("/upload", controller.Upload)
+	router.POST("/upload", controller.Upload)
 	router.Run(":8080")
 }

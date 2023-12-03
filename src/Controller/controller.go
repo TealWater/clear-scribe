@@ -35,27 +35,51 @@ func Parse(c *gin.Context) {
 
 }
 
-// func Upload(c *gin.Context) {
-// 	//save the income file to an actual file
-// 	file, err := c.FormFile("file")
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
+func Upload(c *gin.Context) {
+	fileUpload := &obj.FileUpload{}
+	// Bind the file from the request to the struct
+	if err := c.ShouldBind(fileUpload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	src, err := file.Open()
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
+	// Save the uploaded file
+	err := c.SaveUploadedFile(fileUpload.File, fileUpload.File.Filename)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	content, err := io.ReadAll(src)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
-// }
+	fmt.Println("***: ", fileUpload.File.Filename)
+
+	/*
+
+		File parsing below
+	*/
+
+	//save the income file to an actual file
+	// file, err := c.FormFile("file")
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	// src, err := file.Open()
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	// content, err := io.ReadAll(src)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	// str := string(content)
+	// fmt.Println(str)
+	c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
+}
 
 /*
 
