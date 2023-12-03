@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -10,7 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Parse(c *gin.Context) {
+var oldMessage string
+var mp map[string]string
+
+func UploadText(c *gin.Context) {
 	msg := &obj.IncomingText{}
 	var hi = "hi mom"
 	fmt.Println(hi)
@@ -19,7 +23,8 @@ func Parse(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("%+v\n", *msg)
+	fmt.Printf("%+v\n", *&msg.Message)
+	oldMessage = *&msg.Message
 
 	//fmt.Println(msg.Message)
 	words := strings.Split(msg.Message, " ")
@@ -35,7 +40,7 @@ func Parse(c *gin.Context) {
 
 }
 
-func Upload(c *gin.Context) {
+func UploadFile(c *gin.Context) {
 	fileUpload := &obj.FileUpload{}
 	// Bind the file from the request to the struct
 	if err := c.ShouldBind(fileUpload); err != nil {
@@ -57,27 +62,20 @@ func Upload(c *gin.Context) {
 		File parsing below
 	*/
 
-	//save the income file to an actual file
-	// file, err := c.FormFile("file")
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
+	src, err := fileUpload.File.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-	// src, err := file.Open()
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 	return
-	// }
+	content, err := io.ReadAll(src)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-	// content, err := io.ReadAll(src)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 	return
-	// }
-
-	// str := string(content)
-	// fmt.Println(str)
+	oldMessage = string(content)
+	fmt.Println(oldMessage)
 	c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
 }
 
