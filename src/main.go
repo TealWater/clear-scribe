@@ -14,6 +14,7 @@ func main() {
 			"message": "Hello world",
 		})
 	})
+
 	router.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowCredentials: true,
