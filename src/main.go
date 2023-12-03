@@ -29,7 +29,7 @@ func main() {
 	})
 
 	router.Use(cors.New(cors.Options{
-		AllowedOrigins:   []string{os.Getenv("TrustedURL")},
+		AllowedOrigins:   []string{os.Getenv("TRUSTED_URL")},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 		AllowedHeaders:   []string{"Access-Control-Allow-Origin", "Content-Type"},
