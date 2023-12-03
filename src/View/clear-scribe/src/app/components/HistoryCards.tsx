@@ -1,5 +1,6 @@
 "use client"
 
+
 import { useState, useEffect } from "react";
 interface Card {
   id: number;
@@ -69,6 +70,7 @@ export default function HistoryCards() {
 
   const handleCardClick = (card: any) => {
     setSelectedCard(card);
+
   };
 
   const handleCloseModal = () => {
@@ -77,11 +79,14 @@ export default function HistoryCards() {
 
   return (
     <>
+
       {dataMessage.map((card, index) => (
+
         <div key={index} className="flex justify-center">
           <div
             className={`bg-white w-96 p-5 rounded-md cursor-pointer hover:scale-105 duration-200 ease-in-out overflow-hidden 
             ${selectedCard !== null ? "line-clamp-6" : "line-clamp-6"}`}
+
             onClick={() => handleCardClick(card)}
           >
             {card.messageNew}
@@ -120,7 +125,7 @@ export default function HistoryCards() {
   </div>
 )}
 
-      
+    
     </>
   );
 }
