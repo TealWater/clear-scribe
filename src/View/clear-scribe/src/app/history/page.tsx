@@ -1,8 +1,12 @@
+
+import HistoryBody from "../components/HistoryBody";
+
 export default function Home() {
     return (
-      <h1>
-        hi history
-      </h1>
-    )
+      <div>
+      <HistoryBody />
+      </ div>
+    );
+
   }
   
