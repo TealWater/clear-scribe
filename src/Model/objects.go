@@ -20,3 +20,10 @@ type EditedEssay struct {
 	MessageOld string             `json:"messageOld,omitempty" bson:"messageOld,omitempty"`
 	MessageNew string             `json:"messageNew,omitempty" bson:"messageNew,omitempty"`
 }
+
+type MockEditedEssay struct {
+	ID         int    `json:"id"`
+	CreatedAt  string `json:"createdAt"`
+	MessageOld string `json:"messageOld"`
+	MessageNew string `json:"messageNew"`
+}

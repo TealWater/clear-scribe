@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	obj "github.com/TealWater/clear-scribe/src/Model"
 
@@ -12,7 +13,14 @@ import (
 )
 
 var oldMessage string
-var mp map[string]string
+var mp map[string]string = make(map[string]string)
+
+func init() {
+	//mp = make(map[string]string)
+	mp["i"] = "hi"
+	mp["house"] = "dwelling"
+
+}
 
 func UploadText(c *gin.Context) {
 	msg := &obj.IncomingText{}
@@ -36,7 +44,17 @@ func UploadText(c *gin.Context) {
 		//words[k] = map[v]
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "POST request recieved"})
+	// c.JSON(http.StatusOK, gin.H{"message": "POST request recieved"})
+
+	newMessage := parse(oldMessage)
+	result := obj.MockEditedEssay{
+		ID:         0,
+		CreatedAt:  time.Now().String(),
+		MessageOld: oldMessage,
+		MessageNew: newMessage,
+	}
+
+	c.JSON(http.StatusOK, result)
 
 }
 
@@ -76,7 +94,15 @@ func UploadFile(c *gin.Context) {
 
 	oldMessage = string(content)
 	fmt.Println(oldMessage)
-	c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
+	// c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
+	newMessage := parse(oldMessage)
+	result := obj.MockEditedEssay{
+		ID:         0,
+		CreatedAt:  time.Now().String(),
+		MessageOld: oldMessage,
+		MessageNew: newMessage,
+	}
+	c.JSON(http.StatusOK, result)
 }
 
 /*
@@ -88,3 +114,15 @@ method #3 --> parse the text and add the changes
 
 
 */
+
+// swap out complicated words for simple ones
+func parse(msgOld string) string {
+	words := strings.Split(msgOld, " ")
+	for k, v := range words {
+		v = strings.ToLower(v)
+		if val, ok := mp[v]; ok {
+			words[k] = val
+		}
+	}
+	return strings.Join(words, " ")
+}
