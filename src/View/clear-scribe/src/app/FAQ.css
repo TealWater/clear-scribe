@@ -1,0 +1,46 @@
+.faq-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.accordion-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.accordion-container {
+  margin-top: 20px;
+}
+
+.accordion-item {
+  margin-bottom: 1px;
+}
+
+button {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+button h3 {
+  margin: 0;
+}
+
+button span {
+  font-size: 1.2rem;
+}
+
+.answer-container {
+  padding: 10px;
+}
+
+.answer-content {
+  margin-top: 10px;
+}
