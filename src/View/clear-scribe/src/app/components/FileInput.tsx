@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from 'react';
@@ -53,6 +54,7 @@ export default function FileInput() {
           <div className="mt-4">
             <button onClick={() => processFile()} className="bg-indigo-500 text-white py-2 px-4 rounded-md mb-10">
               Process File
+
             </button>
           </div>
         </div>
@@ -61,3 +63,4 @@ export default function FileInput() {
     </>
   );
 }
+

@@ -1,3 +1,4 @@
+
 import HistoryBody from "../components/HistoryBody";
 
 export default function Home() {

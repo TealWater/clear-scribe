@@ -6,11 +6,13 @@ export default function InputField() {
   const [descriptionValue, setDescriptionValue] = useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+
     // get the value
     setDescriptionValue(event.target.value);
   };
 
   const handleButtonClick = () => {
+
     // handles spaces to see if something was sent
     if (descriptionValue.trim() === "") {
       alert("Error! There is nothing to process")
@@ -20,6 +22,7 @@ export default function InputField() {
     const inputValue = {
       message: descriptionValue,
     };
+
 
     // send to backend via POST and convert it to json
     fetch("http://localhost:8080/send", {
@@ -38,6 +41,7 @@ export default function InputField() {
         console.error("Error:", error);
       });
 
+
       // clear textarea value
     setDescriptionValue("");
   };
@@ -46,6 +50,7 @@ export default function InputField() {
     <>
       <section className="flex flex-row justify-center">
         <div className="flex flex-col items-center">
+
           <h1 className="text-xl font-bold mb-4">Enter your text:</h1>
           <textarea
             name="inputArea"
@@ -55,12 +60,14 @@ export default function InputField() {
             className="border p-2 rounded-md w-64 md:w-80 lg:w-96 h-48">
             </textarea>
           <div className="mt-4">
+
             <button onClick={handleButtonClick} className=" bg-indigo-500 text-white py-2 px-4 rounded-md mb-5">
               Process Text
             </button>
           </div>
         </div>
       </section>
+
     </>
   );
 }
