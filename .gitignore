@@ -22,3 +22,6 @@ go.work
 
 #.txt files
 *.txt
+
+# environment variables
+*.env

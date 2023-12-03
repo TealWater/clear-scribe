@@ -1,10 +1,23 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	controller "github.com/TealWater/clear-scribe/src/Controller"
 	"github.com/gin-gonic/gin"
+
+	"github.com/joho/godotenv"
+
 	cors "github.com/rs/cors/wrapper/gin"
 )
+
+func init() {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatal("unable to laod environment variables")
+	}
+
+}
 
 func main() {
 	router := gin.Default()
@@ -22,7 +35,10 @@ func main() {
 		AllowedHeaders:   []string{"Access-Control-Allow-Origin", "Content-Type"},
 	}))
 
-	router.POST("/send", controller.Parse)
-	router.POST("/upload", controller.Upload)
-	router.Run(":8080")
+	router.POST("/send", controller.UploadText)
+	router.POST("/upload", controller.UploadFile)
+	// router.GET("/allRecords", controller.GetAllRecords)
+	router.GET("/history", controller.UploadMockHistory)
+	router.Run(":" + os.Getenv("PORT"))
+
 }
