@@ -16,10 +16,9 @@ var oldMessage string
 var mp map[string]string = make(map[string]string)
 
 func init() {
-	//mp = make(map[string]string)
 	mp["i"] = "hi"
 	mp["house"] = "dwelling"
-
+	mp["pleased"] = "happy"
 }
 
 func UploadText(c *gin.Context) {
@@ -103,6 +102,49 @@ func UploadFile(c *gin.Context) {
 		MessageNew: newMessage,
 	}
 	c.JSON(http.StatusOK, result)
+}
+
+func UploadMockHistory(c *gin.Context) {
+	notes := []obj.MockEditedEssay{
+		obj.MockEditedEssay{
+			ID:         0,
+			CreatedAt:  time.Now().String(),
+			MessageOld: "I like taking a stroll down mempry lane",
+			MessageNew: "I like taking a walk down memory lane",
+		},
+		obj.MockEditedEssay{
+			ID:         1,
+			CreatedAt:  time.Now().String(),
+			MessageOld: "All humans have gone through a period of gestation for nine months",
+			MessageNew: "All humans have gone through a period of development for nine months",
+		},
+		obj.MockEditedEssay{
+			ID:         2,
+			CreatedAt:  time.Now().String(),
+			MessageOld: "I have no quarrel with Cammalot",
+			MessageNew: "I have no problem with Cammalot",
+		},
+		obj.MockEditedEssay{
+			ID:         3,
+			CreatedAt:  time.Now().String(),
+			MessageOld: "Do you have any more queries?",
+			MessageNew: "Do you have any more questions?",
+		},
+		obj.MockEditedEssay{
+			ID:         4,
+			CreatedAt:  time.Now().String(),
+			MessageOld: "My classroom was adjacent to the library.",
+			MessageNew: "My classroom was next to the library.",
+		},
+		obj.MockEditedEssay{
+			ID:         5,
+			CreatedAt:  time.Now().String(),
+			MessageOld: "The child has a inqusistive look.",
+			MessageNew: "The child has a pensive look.",
+		},
+	}
+
+	c.JSON(http.StatusOK, notes)
 }
 
 /*

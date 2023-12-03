@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	controller "github.com/TealWater/clear-scribe/src/Controller"
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,7 @@ func main() {
 
 	router.POST("/send", controller.UploadText)
 	router.POST("/upload", controller.UploadFile)
-	router.GET("/allRecords", controller.GetAllRecords)
-	router.Run(":8080")
+	// router.GET("/allRecords", controller.GetAllRecords)
+	router.GET("/history", controller.UploadMockHistory)
+	router.Run(":" + os.Getenv("PORT"))
 }
