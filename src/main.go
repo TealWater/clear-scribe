@@ -37,7 +37,7 @@ func main() {
 
 	router.POST("/send", controller.UploadText)
 	router.POST("/upload", controller.UploadFile)
-	// router.GET("/allRecords", controller.GetAllRecords)
+	router.GET("/allRecords", controller.GetAllRecords)
 	router.GET("/history", controller.UploadMockHistory)
 	router.Run(":" + os.Getenv("PORT"))
 
