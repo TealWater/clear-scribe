@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -17,11 +18,10 @@ import (
 )
 
 var collection *mongo.Collection
+var database *mongo.Database
+var mongoClient *mongo.Client
 
 const dbName = "notes"
-
-// const colNameOld = "messageOld"
-// const colNameNew = "messageNew"
 const colName = "messages"
 
 func init() {
@@ -39,12 +39,13 @@ func init() {
 		log.Panic(err)
 	}
 
-	defer func() {
-		if err = mongoClient.Disconnect(context.TODO()); err != nil {
-			log.Println("error trying to disconnect from the DB")
-			log.Panic(err)
-		}
-	}()
+	//running this will close the database, thus throwing an error
+	// defer func() {
+	// 	if err = mongoClient.Disconnect(context.TODO()); err != nil {
+	// 		log.Println("error trying to disconnect from the DB")
+	// 		log.Panic(err)
+	// 	}
+	// }()
 
 	// Send a ping to confirm a successful connection
 	if err := mongoClient.Database("admin").RunCommand(context.TODO(), bson.D{{"ping", 1}}).Err(); err != nil {
@@ -52,18 +53,48 @@ func init() {
 	}
 	log.Println("Pinged your deployment. You successfully connected to MongoDB!")
 
-	collection = mongoClient.Database(dbName).Collection(colName)
+	databases, err := mongoClient.ListDatabaseNames(context.TODO(), bson.M{})
+	if err != nil {
+		log.Fatal("line 57!: ", err)
+	}
+	log.Println(databases)
+
+	database = mongoClient.Database(dbName)
+	collection = database.Collection(colName)
+	fmt.Println("collection name: ", collection.Name())
+
+	/* Testing */
+	// insertResult, err := collection.InsertOne(context.Background(), bson.D{
+	// 	{Key: "createdAt", Value: time.Now()},
+	// 	{Key: "messageOld", Value: "Taking a stroll in the park"},
+	// 	{Key: "messageNew", Value: "Taking a walk in the park"},
+	// })
+	// if err != nil {
+	// 	log.Fatal("failed at line 75!", err)
+	// }
+	// fmt.Println(insertResult.InsertedID)
+
+	// tempEssay := model.EditedEssay{
+	// 	CreatedAt:  primitive.NewDateTimeFromTime(time.Now()),
+	// 	MessageOld: "This book is a very cathardic read",
+	// 	MessageNew: "This book is a very relaxing read",
+	// }
+	// insertResult, err := collection.InsertOne(context.TODO(), tempEssay)
+	// if err != nil {
+	// 	log.Fatal("failed at line 75!", err)
+	// }
+	// fmt.Printf("Inserted %v!", insertResult.InsertedID)
+
 }
 
-func insertMessages(messageOld, messageNew string) {
+func InsertMessages(messageOld, messageNew string) {
 	entry := model.EditedEssay{
-		ID:         primitive.NewObjectID(),
-		CreatedAt:  primitive.NewDateTimeFromTime(time.Time{}),
+		CreatedAt:  primitive.NewDateTimeFromTime(time.Now()),
 		MessageOld: messageOld,
 		MessageNew: messageNew,
 	}
 
-	inserted, err := collection.InsertOne(context.Background(), entry)
+	inserted, err := collection.InsertOne(context.TODO(), entry)
 	if err != nil {
 		log.Println("unable to insert data")
 		log.Fatal(err)
@@ -139,6 +170,13 @@ func AddARecord(c *gin.Context, msgOld, msgNew string) {
 	mmg.MessageOld = msgOld
 	mmg.MessageNew = msgNew
 
-	insertMessages(mmg.MessageOld, mmg.MessageNew)
+	InsertMessages(mmg.MessageOld, mmg.MessageNew)
 
+}
+
+func CloseDB() {
+	if err := mongoClient.Disconnect(context.TODO()); err != nil {
+		log.Println("error trying to disconnect from the DB")
+		log.Panic(err)
+	}
 }

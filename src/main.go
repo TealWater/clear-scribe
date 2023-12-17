@@ -41,4 +41,5 @@ func main() {
 	router.GET("/history", controller.UploadMockHistory)
 	router.Run(":" + os.Getenv("PORT"))
 
+	defer controller.CloseDB()
 }
