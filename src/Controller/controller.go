@@ -3,9 +3,9 @@ package controller
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	obj "github.com/TealWater/clear-scribe/src/Model"
 
@@ -40,9 +40,7 @@ func UploadText(c *gin.Context) {
 	}
 
 	newMessage := parse(oldMessage)
-	InsertMessages(oldMessage, newMessage)
-	//c.JSON(http.StatusOK, result)
-	// c.JSON(http.StatusOK, gin.H{"message": "POST request recieved"})
+	insertMessages(oldMessage, newMessage)
 	c.JSON(http.StatusOK, gin.H{"messageNew": newMessage})
 }
 
@@ -83,53 +81,23 @@ func UploadFile(c *gin.Context) {
 	oldMessage = string(content)
 	fmt.Println(oldMessage)
 	newMessage := parse(oldMessage)
-	InsertMessages(oldMessage, newMessage)
-	//c.JSON(http.StatusOK, result)
-	//c.JSON(http.StatusOK, gin.H{"message": "POST request recieved"})
+	insertMessages(oldMessage, newMessage)
 	c.JSON(http.StatusOK, gin.H{"messageNew": newMessage})
 }
 
-func UploadMockHistory(c *gin.Context) {
-	notes := []obj.MockEditedEssay{
-		{
-			ID:         0,
-			CreatedAt:  time.Now().String(),
-			MessageOld: "I like taking a stroll down mempry lane",
-			MessageNew: "I like taking a walk down memory lane",
-		},
-		{
-			ID:         1,
-			CreatedAt:  time.Now().String(),
-			MessageOld: "All humans have gone through a period of gestation for nine months",
-			MessageNew: "All humans have gone through a period of development for nine months",
-		},
-		{
-			ID:         2,
-			CreatedAt:  time.Now().String(),
-			MessageOld: "I have no quarrel with Cammalot",
-			MessageNew: "I have no problem with Cammalot",
-		},
-		{
-			ID:         3,
-			CreatedAt:  time.Now().String(),
-			MessageOld: "Do you have any more queries?",
-			MessageNew: "Do you have any more questions?",
-		},
-		{
-			ID:         4,
-			CreatedAt:  time.Now().String(),
-			MessageOld: "My classroom was adjacent to the library.",
-			MessageNew: "My classroom was next to the library.",
-		},
-		{
-			ID:         5,
-			CreatedAt:  time.Now().String(),
-			MessageOld: "The child has a inqusistive look.",
-			MessageNew: "The child has a pensive look.",
-		},
+func DeleteRecord(c *gin.Context) {
+	id := c.Query("id")
+	if err := deleteMessage(id); err != nil {
+		log.Println(err)
 	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
 
-	c.JSON(http.StatusOK, notes)
+func GetAllRecords(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+	c.Request.Method = "POST"
+	allRecords := getAllMessages()
+	c.JSON(http.StatusOK, allRecords)
 }
 
 /*
