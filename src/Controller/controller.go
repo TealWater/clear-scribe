@@ -30,33 +30,21 @@ func UploadText(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("%+v\n", *&msg.Message)
-	oldMessage = *&msg.Message
-
-	//fmt.Println(msg.Message)
+	fmt.Printf("%+v\n", msg.Message)
+	oldMessage = msg.Message
 	words := strings.Split(msg.Message, " ")
-	//fmt.Println(words[0])
-
 	for _, v := range words {
 		fmt.Println(v)
 		//search map for synonym
 		//words[k] = map[v]
 	}
 
-	// c.JSON(http.StatusOK, gin.H{"message": "POST request recieved"})
-
 	newMessage := parse(oldMessage)
-	result := obj.MockEditedEssay{
-		ID:         0,
-		CreatedAt:  time.Now().String(),
-		MessageOld: oldMessage,
-		MessageNew: newMessage,
-	}
-
-	c.JSON(http.StatusOK, result)
-
+	InsertMessages(oldMessage, newMessage)
+	//c.JSON(http.StatusOK, result)
+	// c.JSON(http.StatusOK, gin.H{"message": "POST request recieved"})
+	c.JSON(http.StatusOK, gin.H{"messageNew": newMessage})
 }
-
 
 func UploadFile(c *gin.Context) {
 	fileUpload := &obj.FileUpload{}
@@ -94,50 +82,46 @@ func UploadFile(c *gin.Context) {
 
 	oldMessage = string(content)
 	fmt.Println(oldMessage)
-	// c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
 	newMessage := parse(oldMessage)
-	result := obj.MockEditedEssay{
-		ID:         0,
-		CreatedAt:  time.Now().String(),
-		MessageOld: oldMessage,
-		MessageNew: newMessage,
-	}
-	c.JSON(http.StatusOK, result)
+	InsertMessages(oldMessage, newMessage)
+	//c.JSON(http.StatusOK, result)
+	//c.JSON(http.StatusOK, gin.H{"message": "POST request recieved"})
+	c.JSON(http.StatusOK, gin.H{"messageNew": newMessage})
 }
 
 func UploadMockHistory(c *gin.Context) {
 	notes := []obj.MockEditedEssay{
-		obj.MockEditedEssay{
+		{
 			ID:         0,
 			CreatedAt:  time.Now().String(),
 			MessageOld: "I like taking a stroll down mempry lane",
 			MessageNew: "I like taking a walk down memory lane",
 		},
-		obj.MockEditedEssay{
+		{
 			ID:         1,
 			CreatedAt:  time.Now().String(),
 			MessageOld: "All humans have gone through a period of gestation for nine months",
 			MessageNew: "All humans have gone through a period of development for nine months",
 		},
-		obj.MockEditedEssay{
+		{
 			ID:         2,
 			CreatedAt:  time.Now().String(),
 			MessageOld: "I have no quarrel with Cammalot",
 			MessageNew: "I have no problem with Cammalot",
 		},
-		obj.MockEditedEssay{
+		{
 			ID:         3,
 			CreatedAt:  time.Now().String(),
 			MessageOld: "Do you have any more queries?",
 			MessageNew: "Do you have any more questions?",
 		},
-		obj.MockEditedEssay{
+		{
 			ID:         4,
 			CreatedAt:  time.Now().String(),
 			MessageOld: "My classroom was adjacent to the library.",
 			MessageNew: "My classroom was next to the library.",
 		},
-		obj.MockEditedEssay{
+		{
 			ID:         5,
 			CreatedAt:  time.Now().String(),
 			MessageOld: "The child has a inqusistive look.",

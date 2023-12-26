@@ -6,7 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-
 type IncomingText struct {
 	Message string `json:"message"`
 }
@@ -16,7 +15,7 @@ type FileUpload struct {
 }
 
 type EditedEssay struct {
-	ID         primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	ID         primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
 	CreatedAt  primitive.DateTime `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	MessageOld string             `json:"messageOld,omitempty" bson:"messageOld,omitempty"`
 	MessageNew string             `json:"messageNew,omitempty" bson:"messageNew,omitempty"`
