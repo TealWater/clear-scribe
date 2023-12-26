@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from 'react';
@@ -31,12 +30,31 @@ export default function FileInput() {
       const finalContent = {
         message: fileContent,
       }
+
+      fetch("http://localhost:8080/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(finalContent),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
       console.log(finalContent);
       // You can add your file processing logic here
     } else {
       alert("No file content to process.");
     }
-  }
+
+    setFileContent("");
+  };
 
   return (
     <>
@@ -54,7 +72,6 @@ export default function FileInput() {
           <div className="mt-4">
             <button onClick={() => processFile()} className="bg-indigo-500 text-white py-2 px-4 rounded-md mb-10">
               Process File
-
             </button>
           </div>
         </div>
@@ -63,4 +80,3 @@ export default function FileInput() {
     </>
   );
 }
-
