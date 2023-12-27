@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -55,8 +56,12 @@ func init() {
 }
 
 func insertMessages(messageOld, messageNew string) {
+	const format = "Jan 2, 2006 at 3:04pm (MST)"
+	date := time.Now().Local()
+
 	entry := model.EditedEssay{
-		CreatedAt:  primitive.NewDateTimeFromTime(time.Now()),
+		CreatedAt:  primitive.NewDateTimeFromTime(date),
+		DateString: date.Format(format),
 		MessageOld: messageOld,
 		MessageNew: messageNew,
 	}
@@ -79,7 +84,11 @@ func deleteMessage(messageId string) error {
 		return err
 	}
 
-	log.Println("Message with id ", messageId, " was deleted, with count of: ", deleteCount.DeletedCount)
+	if deleteCount.DeletedCount == 0 {
+		return errors.New("message with id " + messageId + " does not exist in the database")
+	}
+
+	log.Println("message with id ", messageId, " was deleted, with count of: ", deleteCount.DeletedCount)
 	return nil
 }
 

@@ -17,6 +17,7 @@ type FileUpload struct {
 type EditedEssay struct {
 	ID         primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
 	CreatedAt  primitive.DateTime `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	DateString string             `json:"dateString,omitempty" bson:"dateString,omitempty"`
 	MessageOld string             `json:"messageOld,omitempty" bson:"messageOld,omitempty"`
 	MessageNew string             `json:"messageNew,omitempty" bson:"messageNew,omitempty"`
 }
