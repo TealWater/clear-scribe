@@ -61,7 +61,7 @@ export default function InputField() {
             </textarea>
           <div className="mt-4">
 
-            <button onClick={handleButtonClick} className=" bg-indigo-500 text-white py-2 px-4 rounded-md mb-5">
+            <button onClick={handleButtonClick} className=" bg-indigo-500 text-white py-2 px-4 rounded-md mb-5 duration-200 hover:scale-105">
               Process Text
             </button>
           </div>
