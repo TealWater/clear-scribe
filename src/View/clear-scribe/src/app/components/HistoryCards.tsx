@@ -1,94 +1,69 @@
 "use client"
 
-
 import { useState, useEffect } from "react";
 interface Card {
-  id: number;
+  _id: string;
   createdAt: string;
   messageOld: string;
   messageNew: string;
 }
 
 export default function HistoryCards() {
-  //const [dataMessage, setDataMessage] = useState([]);
+  const [dataMessage, setDataMessage] = useState<Card[]>([]);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
-  const dataMessage = [
-    {
-        "id": 0,
-        "createdAt": "2023-12-03 14:28:07.809752 -0500 EST m=+11.133889846",
-        "messageOld": "I like taking a stroll down mempry lane",
-        "messageNew": "I like taking a walk down memory lane"
-    },
-    {
-        "id": 1,
-        "createdAt": "2023-12-03 14:28:07.809758 -0500 EST m=+11.133895769",
-        "messageOld": "All humans have gone through a period of gestation for nine months",
-        "messageNew": "All humans have gone through a period of development for nine months"
-    },
-    {
-        "id": 2,
-        "createdAt": "2023-12-03 14:28:07.809759 -0500 EST m=+11.133896818",
-        "messageOld": "I have no quarrel with Cammalot",
-        "messageNew": "I have no problem with Cammalot"
-    },
-    {
-        "id": 3,
-        "createdAt": "2023-12-03 14:28:07.80976 -0500 EST m=+11.133897519",
-        "messageOld": "Do you have any more queries?",
-        "messageNew": "Do you have any more questions?"
-    },
-    {
-        "id": 4,
-        "createdAt": "2023-12-03 14:28:07.80976 -0500 EST m=+11.133898268",
-        "messageOld": "My classroom was adjacent to the library.",
-        "messageNew": "My classroom was next to the library."
-    },
-    {
-        "id": 5,
-        "createdAt": "2023-12-03 14:28:07.809761 -0500 EST m=+11.133898878",
-        "messageOld": "The child has a inqusistive look.",
-        "messageNew": "The child has a pensive look."
+  // fetch from database and store it in dataMessage
+  const fetchData = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/history");
+      const data = await res.json();
+      setDataMessage(data);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-]
-
-
-  /* useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/history");
-        const data = await res.json();
-        setDataMessage(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData(); 
-  }, []); */
-
-  const handleCardClick = (card: any) => {
-    setSelectedCard(card);
-
   };
 
+// using id of the specific card selected sends a DELETE method and clears from the state 
+const deleteCard = async (id: string) => {
+  try {
+    const response = await fetch(`http://localhost:8080/history?id=${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      console.log('Resource deleted successfully');
+      setDataMessage((prevData) => prevData.filter(card => card._id !== id));
+    } else {
+      console.error('Failed to delete resource');
+    }
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+  useEffect(() => {
+    fetchData(); 
+  }, []); 
+
+  // depending on card clicked it opens up the modal with its specific info
+  const handleCardClick = (card: any) => {
+    setSelectedCard(card);
+  };
+
+  // changes card to null to close modal
   const handleCloseModal = () => {
     setSelectedCard(null);
   };
 
   return (
     <>
-
-      {dataMessage.map((card, index) => (
-
-        <div key={index} className="flex justify-center">
+      {dataMessage.map((card) => (
+        <div key={card._id} className="flex justify-center">
           <div
             className={`bg-white w-96 p-5 rounded-md cursor-pointer hover:scale-105 duration-200 ease-in-out overflow-hidden 
             ${selectedCard !== null ? "line-clamp-6" : "line-clamp-6"}`}
-
-            onClick={() => handleCardClick(card)}
-          >
+            onClick={() => handleCardClick(card)}>
             {card.messageNew}
           </div>
         </div>
@@ -105,8 +80,8 @@ export default function HistoryCards() {
         >
           Close
         </button>
-        <span className="text-sm md:text-base">22/10/2023</span>
-        <button className="p-2 rounded-md hover:bg-gray-200 mb-5">
+        <span className="text-sm md:text-base">{JSON.stringify(selectedCard.createdAt)}</span>
+        <button onClick={() => {handleCloseModal(); deleteCard(selectedCard._id);}} className="p-2 rounded-md hover:bg-gray-200 mb-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="16"
@@ -123,9 +98,7 @@ export default function HistoryCards() {
       <p className="text-base">{selectedCard.messageOld}</p>
     </div>
   </div>
-)}
-
-    
+)}  
     </>
   );
 }

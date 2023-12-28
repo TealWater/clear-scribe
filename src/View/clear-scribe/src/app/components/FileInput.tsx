@@ -26,12 +26,14 @@ export default function FileInput() {
   }
 
   function processFile() {
+    // convert it to an object
     if (fileContent) {
       const finalContent = {
         message: fileContent,
       }
 
-      fetch("http://localhost:8080/upload", {
+      // sends the data to the backend via POST
+      fetch("http://localhost:8080/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,14 +48,10 @@ export default function FileInput() {
       .catch((error) => {
         console.error("Error:", error);
       });
-
       console.log(finalContent);
-      // You can add your file processing logic here
     } else {
       alert("No file content to process.");
     }
-
-    setFileContent("");
   };
 
   return (
@@ -64,7 +62,7 @@ export default function FileInput() {
           <input
             id="fileInput"
             type="file"
-            accept=".txt, .pdf"
+            accept=".txt"
             onChange={(event) => uploadFile(event)}
             placeholder="Enter your text here"
             className="border p-2 rounded-md mt-5 transition-all duration-300 ease-in-out"
