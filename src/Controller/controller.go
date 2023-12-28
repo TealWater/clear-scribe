@@ -89,6 +89,8 @@ func DeleteRecord(c *gin.Context) {
 	id := c.Query("id")
 	if err := deleteMessage(id); err != nil {
 		log.Println(err)
+		c.JSON(http.StatusNotFound, gin.H{"status": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
