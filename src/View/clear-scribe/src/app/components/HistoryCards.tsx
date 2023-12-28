@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 interface Card {
   _id: string;
   createdAt: string;
+  dateString: string;
   messageOld: string;
   messageNew: string;
 }
@@ -73,14 +74,14 @@ const deleteCard = async (id: string) => {
 {selectedCard !== null && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-20">
     <div className="bg-white p-8 rounded-md w-[300px] sm:w-[400px] md:w-[700px] h-[400px] overflow-y-auto shadow-xl">
-      <div className="flex justify-between">
+      <div className="flex md:justify-between ">
         <button
           className="bg-black text-white p-2 rounded-md hover:bg-zinc-700 mb-5 scale-90 md:scale-100"
           onClick={handleCloseModal}
         >
           Close
         </button>
-        <span className="text-sm md:text-base">{JSON.stringify(selectedCard.createdAt)}</span>
+        <span className="text-sm text-center md:text-base">{selectedCard.dateString}</span>
         <button onClick={() => {handleCloseModal(); deleteCard(selectedCard._id);}} className="p-2 rounded-md hover:bg-gray-200 mb-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"

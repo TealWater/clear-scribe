@@ -68,7 +68,7 @@ export default function FileInput() {
             className="border p-2 rounded-md mt-5 transition-all duration-300 ease-in-out"
           />
           <div className="mt-4">
-            <button onClick={() => processFile()} className="bg-indigo-500 text-white py-2 px-4 rounded-md mb-10">
+            <button onClick={() => processFile()} className="bg-indigo-500 text-white py-2 px-4 rounded-md mb-10 duration-200 hover:scale-105">
               Process File
             </button>
           </div>
