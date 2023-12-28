@@ -4,6 +4,7 @@ import "../FAQ.css";
 
 export default function Faq() {
 
+  // array of questions and answers
   const datas = [
     {
       question: 'What is ClearScribe?',
@@ -18,7 +19,7 @@ export default function Faq() {
         answer: 'From a student to a professional, everyone can use ClearScribe to simplify any text you want.',
       },
   ];
-
+  // question at specific index to open it
   const [activeIndex, setActiveIndex] = useState(null);
   const handleToggleAccordion = (index : any) => {
     setActiveIndex(activeIndex === index ? null : index);
