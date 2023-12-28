@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strings"
 
 	obj "github.com/TealWater/clear-scribe/src/Model"
 
@@ -13,13 +12,6 @@ import (
 )
 
 var oldMessage string
-var mp map[string]string = make(map[string]string)
-
-func init() {
-	mp["i"] = "hi"
-	mp["house"] = "dwelling"
-	mp["pleased"] = "happy"
-}
 
 func UploadText(c *gin.Context) {
 	msg := &obj.IncomingText{}
@@ -30,16 +22,13 @@ func UploadText(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("%+v\n", msg.Message)
 	oldMessage = msg.Message
-	words := strings.Split(msg.Message, " ")
-	for _, v := range words {
-		fmt.Println(v)
-		//search map for synonym
-		//words[k] = map[v]
+	newMessage, err := sendPrompt(oldMessage)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "unable to contact OpenAI"})
+		return
 	}
-
-	newMessage := parse(oldMessage)
 	insertMessages(oldMessage, newMessage)
 	c.JSON(http.StatusOK, gin.H{"messageNew": newMessage})
 }
@@ -62,7 +51,6 @@ func UploadFile(c *gin.Context) {
 	fmt.Println("***: ", fileUpload.File.Filename)
 
 	/*
-
 		File parsing below
 	*/
 
@@ -79,8 +67,12 @@ func UploadFile(c *gin.Context) {
 	}
 
 	oldMessage = string(content)
-	fmt.Println(oldMessage)
-	newMessage := parse(oldMessage)
+	newMessage, err := sendPrompt(oldMessage)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "unable to contact OpenAI"})
+		return
+	}
 	insertMessages(oldMessage, newMessage)
 	c.JSON(http.StatusOK, gin.H{"messageNew": newMessage})
 }
@@ -100,26 +92,4 @@ func GetAllRecords(c *gin.Context) {
 	c.Request.Method = "POST"
 	allRecords := getAllMessages()
 	c.JSON(http.StatusOK, allRecords)
-}
-
-/*
-
-2 methods  --> one focus on open the file and getting the text data
-			- focus on getting the data out of the response body
-
-method #3 --> parse the text and add the changes
-
-
-*/
-
-// swap out complicated words for simple ones
-func parse(msgOld string) string {
-	words := strings.Split(msgOld, " ")
-	for k, v := range words {
-		v = strings.ToLower(v)
-		if val, ok := mp[v]; ok {
-			words[k] = val
-		}
-	}
-	return strings.Join(words, " ")
 }
