@@ -38,6 +38,7 @@ func main() {
 	router.POST("/send", controller.UploadText)
 	router.POST("/upload", controller.UploadFile)
 	router.GET("/history", controller.GetAllRecords)
+	router.GET("/gpt", controller.SendPrompt)
 	router.DELETE("/history", controller.DeleteRecord)
 	router.Run(":" + os.Getenv("PORT"))
 

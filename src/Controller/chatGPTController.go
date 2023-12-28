@@ -21,16 +21,20 @@ func init() {
 
 /*
 TODO:
-  - figure out it you have to build the model first then send the prompt or
+  - figure out if you have to build the model first then send the prompt or
     you can build the model and then the prompt all in one request.
 */
-func sendPrompt(c *gin.Context) {
+func SendPrompt(c *gin.Context) {
 
 	chat := &model.ChatGPT{}
 	gptResponse := &model.GPTResponse{}
 	chat.Model = "gpt-3.5-turbo"
-	chat.Messages[0].Role = "assistant"
+	//Can't append values to an empty slice
+	chat.Messages = make([]model.GPTSpec, 2)
+	chat.Messages[0].Role = "system"
 	chat.Messages[0].Content = "You are a helpful assistant who speaks multiple languages fluently and can simplify complex words given in a text."
+	chat.Messages[1].Role = "user"
+	chat.Messages[1].Content = "Can you simplify this message for me \"humans undergo a period of gestation for 9 months\""
 
 	// Create a http client to build a request
 	client := &http.Client{}
@@ -49,8 +53,8 @@ func sendPrompt(c *gin.Context) {
 	}
 
 	req.Header = http.Header{
-		"content-type":   {"application/json; charset=UTF-8"},
-		"Authorization:": {"Bearer " + os.Getenv("GPT_KEY")},
+		"content-type":  {"application/json; charset=UTF-8"},
+		"Authorization": {"Bearer " + os.Getenv("GPT_KEY")},
 	}
 
 	resp, err := client.Do(req)
@@ -64,6 +68,7 @@ func sendPrompt(c *gin.Context) {
 	//reading the response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		log.Println("died on line 70")
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
