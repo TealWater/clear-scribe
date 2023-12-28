@@ -35,7 +35,7 @@ func sendPrompt(oldMessage string) (string, error) {
 	chat.Messages[0].Role = "system"
 	chat.Messages[0].Content = "You are a helpful assistant who speaks multiple languages fluently and can simplify complex words given in a text."
 	chat.Messages[1].Role = "user"
-	chat.Messages[1].Content = fmt.Sprintf("Can you simplify this message for me %s", oldMessage)
+	chat.Messages[1].Content = fmt.Sprintf("Simplify this message for me %s", oldMessage)
 
 	// Create a http client to build a request
 	client := &http.Client{}
