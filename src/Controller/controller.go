@@ -93,3 +93,9 @@ func GetAllRecords(c *gin.Context) {
 	allRecords := getAllMessages()
 	c.JSON(http.StatusOK, allRecords)
 }
+
+func safeExit(s string) {
+	if r := recover(); r != nil {
+		log.Println(s)
+	}
+}

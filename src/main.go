@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	controller "github.com/TealWater/clear-scribe/src/Controller"
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,8 @@ func main() {
 
 	router.GET("/time", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "Hello world",
+			"message":    "Hello world",
+			"Local time": time.Now().Local().Format("Jan 2, 2006 at 3:04pm (MST)"),
 		})
 	})
 
