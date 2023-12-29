@@ -20,11 +20,6 @@ func init() {
 	}
 }
 
-/*
-TODO:
-  - figure out if you have to build the model first then send the prompt or
-    you can build the model and then the prompt all in one request.
-*/
 func sendPrompt(oldMessage string) (string, error) {
 	dir, _ := os.Getwd()
 	chat := &model.ChatGPT{}
@@ -39,7 +34,7 @@ func sendPrompt(oldMessage string) (string, error) {
 
 	// Create a http client to build a request
 	client := &http.Client{}
-	url := "https://api.openai.com/v1/chat/completions"
+	url := os.Getenv("OPEN_AI_URL")
 	gptJSONBytes, err := json.Marshal(chat)
 	if err != nil {
 		log.Println("unable to bind JSON from Chat GPT struct. \n Err: ", err)

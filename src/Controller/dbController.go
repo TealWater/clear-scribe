@@ -3,7 +3,6 @@ package controller
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -40,22 +39,23 @@ func init() {
 
 	// Send a ping to confirm a successful connection
 	if err := mongoClient.Database("admin").RunCommand(context.TODO(), bson.D{{"ping", 1}}).Err(); err != nil {
-		panic(err)
+		log.Panic(errors.New("Unable to ping your db deployment. \n Err: " + err.Error()))
 	}
 	log.Println("Pinged your deployment. You successfully connected to MongoDB!")
 
 	databases, err := mongoClient.ListDatabaseNames(context.TODO(), bson.M{})
 	if err != nil {
-		log.Fatal("line 57!: ", err)
+		log.Fatal("line 46!: ", err)
 	}
-	log.Println(databases)
+	log.Println("Databases available: ", databases)
 
 	database = mongoClient.Database(dbName)
 	collection = database.Collection(colName)
-	fmt.Println("collection name: ", collection.Name())
+	log.Println("collection name: ", collection.Name())
 }
 
 func insertMessages(messageOld, messageNew string) {
+	defer safeExit("unable to insert data into the DB.")
 	const format = "Jan 2, 2006 at 3:04pm (MST)"
 	date := time.Now().Local()
 
@@ -68,20 +68,19 @@ func insertMessages(messageOld, messageNew string) {
 
 	inserted, err := collection.InsertOne(context.TODO(), entry)
 	if err != nil {
-		log.Println("unable to insert data")
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	log.Println("Insereted new row entry with the id of: ", inserted.InsertedID)
 }
 
 func deleteMessage(messageId string) error {
+	defer safeExit("unable to delete record from the database. \n Error at line 81")
 	id, _ := primitive.ObjectIDFromHex(messageId)
 	filter := bson.M{"_id": id}
 	deleteCount, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
-		log.Println("unable to delete record from the database")
-		return err
+		log.Panic(err)
 	}
 
 	if deleteCount.DeletedCount == 0 {
@@ -104,10 +103,10 @@ func deleteAllMessages() error {
 }
 
 func getAllMessages() []primitive.M {
+	defer safeExit("Unable to retreive message history from the DB.")
 	cur, err := collection.Find(context.Background(), bson.D{{}})
 	if err != nil {
-		log.Println("Unable to retreive all of the records")
-		log.Fatalln(err)
+		log.Panic(err)
 	}
 
 	var messages []primitive.M
@@ -116,8 +115,8 @@ func getAllMessages() []primitive.M {
 	for cur.Next(context.Background()) {
 		var message bson.M
 		if err := cur.Decode(&message); err != nil {
-			log.Println("unable to decode old message")
-			log.Fatalln(err)
+			log.Println("unable to decode old message. \n Err: ", err)
+			return messages
 		}
 		messages = append(messages, message)
 	}
@@ -126,7 +125,6 @@ func getAllMessages() []primitive.M {
 
 func CloseDB() {
 	if err := mongoClient.Disconnect(context.TODO()); err != nil {
-		log.Println("error trying to disconnect from the DB")
-		log.Panic(err)
+		log.Println("error trying to disconnect from the DB. \n Err: ", err)
 	}
 }
