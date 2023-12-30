@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+let url = "http://localhost:8080";
 
 export default function InputField() {
   const [descriptionValue, setDescriptionValue] = useState("");
@@ -25,7 +26,7 @@ export default function InputField() {
 
 
     // send to backend via POST and convert it to json
-    fetch("http://localhost:8080/send", {
+    fetch(`${url}/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

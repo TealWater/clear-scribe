@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react';
+let url = "http://localhost:8080";
 
 export default function FileInput() {
   const [fileContent, setFileContent] = useState<string | null>(null);
@@ -33,7 +34,7 @@ export default function FileInput() {
       }
 
       // sends the data to the backend via POST
-      fetch("http://localhost:8080/send", {
+      fetch(`${url}/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,6 +53,8 @@ export default function FileInput() {
     } else {
       alert("No file content to process.");
     }
+  
+    setFileContent(null);  
   };
 
   return (
