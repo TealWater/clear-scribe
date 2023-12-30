@@ -10,7 +10,7 @@ export default function MainText() {
         CLEAR SCRIBE
       </h1>
       <p className="font-light text-gray-300 text-sm lg:text-xl max-w-sm lg:max-w-2xl mt-4">
-        Clear Scribe is your ultimate tool for converting complex text into clear, concise, and easily understandable language. Whether you're a student grappling with a challenging textbook, a professional deciphering intricate documents, or simply someone who values straightforward communication, Clear Scribe has got you covered.
+        Clear Scribe is your ultimate tool for converting complex text into clear, concise, and easily understandable language. Whether you&lsquo;re a student grappling with a challenging textbook, a professional deciphering intricate documents, or simply someone who values straightforward communication, Clear Scribe has got you covered.
       </p>
     </div>
   );

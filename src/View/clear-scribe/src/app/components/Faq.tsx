@@ -28,7 +28,7 @@ export default function Faq() {
   return (
       <div className="p-20">
         <div>
-          <h1 className="accordion_1 text-6xl flex justify-center mb-10 font-semibold">FAQ's</h1>
+          <h1 className="accordion_1 text-6xl flex justify-center mb-10 font-semibold">FAQ&lsquo;s</h1>
         </div>
         <div className="accordion_2 space-y-2">
           {datas.map((item, index) =>  (
