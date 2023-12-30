@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
+let url = "http://localhost:8080";
 
 export default function FileInput() {
   const [fileContent, setFileContent] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   function uploadFile(event: React.ChangeEvent<HTMLInputElement>) {
     const fileInput = event.target;
@@ -22,8 +24,9 @@ export default function FileInput() {
       reader.readAsText(file);
     } else {
       alert("No file selected.");
-    }
+    } 
   }
+  
 
   function processFile() {
     // convert it to an object
@@ -33,7 +36,7 @@ export default function FileInput() {
       }
 
       // sends the data to the backend via POST
-      fetch("http://localhost:8080/send", {
+      fetch(`${url}/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,8 +45,21 @@ export default function FileInput() {
     })
       .then((response) => response.json())
       .then((data) => {
-
         console.log(data);
+        if(!data){
+          const button = document.getElementById('sucessMessage');
+          button?.classList.remove("hidden");
+          const button2 = document.getElementById("errorMessage");
+          button2?.classList.add("hidden");
+        } else {
+          const button = document.getElementById("errorMessage");
+          button?.classList.remove("hidden");
+          const button2 = document.getElementById("sucessMessage");
+          button2?.classList.add("hidden");
+        }
+        if(fileInputRef.current){
+          fileInputRef.current.value = "";
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -51,7 +67,9 @@ export default function FileInput() {
       console.log(finalContent);
     } else {
       alert("No file content to process.");
-    }
+    } 
+
+  
   };
 
   return (
@@ -60,6 +78,7 @@ export default function FileInput() {
         <div className="flex flex-col items-center">
           <h1 className="font-semibold text-gray-600 mt-2">or choose a file</h1>
           <input
+            ref={fileInputRef}
             id="fileInput"
             type="file"
             accept=".txt"
@@ -72,6 +91,8 @@ export default function FileInput() {
               Process File
             </button>
           </div>
+          <p className='text-green-500 mb-5 hidden' id='sucessMessage'>File processed. Please click on<a className='underline' href='/history'> 'Files'</a></p>
+          <p className='text-red-500 mb-5 hidden' id='errorMessage'>File couldn't be processed, try again later</p>
         </div>
       </section>
       <hr className="mr-20 ml-20 md:mr-48 md:ml-48 h-0.5" />

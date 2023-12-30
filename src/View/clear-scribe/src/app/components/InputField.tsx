@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+let url = "http://localhost:8080";
 
 export default function InputField() {
   const [descriptionValue, setDescriptionValue] = useState("");
@@ -25,7 +26,7 @@ export default function InputField() {
 
 
     // send to backend via POST and convert it to json
-    fetch("http://localhost:8080/send", {
+    fetch(`${url}/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +35,17 @@ export default function InputField() {
     })
       .then((response) => response.json())
       .then((data) => {
-
+        if(data){
+          const button = document.getElementById("sucessMessage");
+          button?.classList.remove("hidden");
+          const button2 = document.getElementById("errorMessage");
+          button2?.classList.add("hidden");
+        } else {
+          const button = document.getElementById("errorMessage");
+          button?.classList.remove("hidden");
+          const button2 = document.getElementById("sucessMessage");
+          button2?.classList.add("hidden");
+        }
         console.log(data);
       })
       .catch((error) => {
@@ -65,6 +76,8 @@ export default function InputField() {
               Process Text
             </button>
           </div>
+          <p className='text-green-500 mb-5 hidden' id='sucessMessage'>Text processed. Please click on<a className='underline' href='/history'> 'Files'</a></p>
+          <p className='text-red-500 mb-5 hidden' id='errorMessage'>File couldn't be processed, try again later</p>
         </div>
       </section>
 

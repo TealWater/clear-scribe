@@ -8,6 +8,7 @@ interface Card {
   messageOld: string;
   messageNew: string;
 }
+let url = "http://localhost:8080";
 
 export default function HistoryCards() {
   const [dataMessage, setDataMessage] = useState<Card[]>([]);
@@ -16,7 +17,7 @@ export default function HistoryCards() {
   // fetch from database and store it in dataMessage
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:8080/history");
+      const res = await fetch(`${url}/history`);
       const data = await res.json();
       setDataMessage(data);
       console.log(data);
@@ -28,7 +29,7 @@ export default function HistoryCards() {
   // using id of the specific card selected sends a DELETE method and clears from the state 
   const deleteCard = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/history?id=${id}`, {
+      const response = await fetch(`${url}/history?id=${id}`, {
         method: 'DELETE',
       });
 
