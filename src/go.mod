@@ -1,4 +1,4 @@
-module github.com/TealWater/clear-scribe
+module github.com/TealWater/clear-scribe/src
 
 go 1.20
 
