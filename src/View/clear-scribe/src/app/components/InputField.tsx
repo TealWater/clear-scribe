@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-let url = "http://localhost:8080";
+let url =  process.env.NEXT_PUBLIC_BACKEND_API;
 
 export default function InputField() {
   const [descriptionValue, setDescriptionValue] = useState("");
