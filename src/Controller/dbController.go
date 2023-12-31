@@ -28,7 +28,7 @@ func init() {
 	}
 
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	mongoURI := "mongodb+srv://" + os.Getenv("MONGO_DB_USERNAME") + ":" + os.Getenv("MONGO_DB_PASSWORD") + "@cluster0.lx82yxi.mongodb.net/?retryWrites=true&w=majority"
+	mongoURI := "mongodb+srv://" + os.Getenv("MONGO_DB_USERNAME") + ":" + os.Getenv("MONGO_DB_PASSWORD") + "@clearscribe.5i8fx0k.mongodb.net/?retryWrites=true&w=majority"
 	opts := options.Client().ApplyURI(mongoURI).SetServerAPIOptions(serverAPI)
 
 	mongoClient, err := mongo.Connect(context.TODO(), opts)
