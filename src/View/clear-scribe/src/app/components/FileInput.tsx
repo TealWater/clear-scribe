@@ -91,8 +91,8 @@ export default function FileInput() {
               Process File
             </button>
           </div>
-          <p className='text-green-500 mb-5 hidden' id='sucessMessage'>File processed. Please click on<a className='underline' href='/history'> 'Files'</a></p>
-          <p className='text-red-500 mb-5 hidden' id='errorMessage'>File couldn't be processed, try again later</p>
+          <p className='text-green-500 mb-5 hidden' id='sucessMessage'>File processed. Please click on<a className='underline' href='/history'> &lsquo;Files&lsquo;</a></p>
+          <p className='text-red-500 mb-5 hidden' id='errorMessage'>File couldn&lsquo;t be processed, try again later</p>
         </div>
       </section>
       <hr className="mr-20 ml-20 md:mr-48 md:ml-48 h-0.5" />
