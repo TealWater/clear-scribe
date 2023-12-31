@@ -8,7 +8,7 @@ interface Card {
   messageOld: string;
   messageNew: string;
 }
-let url = "http://localhost:8080";
+let url = process.env.NEXT_PUBLIC_BACKEND_API;
 
 export default function HistoryCards() {
   const [dataMessage, setDataMessage] = useState<Card[]>([]);

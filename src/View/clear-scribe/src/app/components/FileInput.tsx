@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef } from 'react';
-let url = "http://localhost:8080";
+let url =  process.env.NEXT_PUBLIC_BACKEND_API;
 
 export default function FileInput() {
   const [fileContent, setFileContent] = useState<string | null>(null);
